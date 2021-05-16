@@ -15,7 +15,7 @@ def parseCsv(spamreader):
   return result
 
 def main(cash_available):
-  with open('papabear-15y-210510.csv', newline='') as csvfile:
+  with open('data/papabear-15y-210510.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
     rows = parseCsv(spamreader)
     print(rows)

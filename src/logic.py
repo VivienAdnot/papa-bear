@@ -43,9 +43,6 @@ def compute_average_gains(rows):
         average_gains[row_index].append(average_gain)
   return average_gains
 
-def buy(cash_available, etfs_to_buy):
-  pass
-
 # determines losers and new winners
 def compute_winners_losers(
   current_winners_indices,
@@ -67,18 +64,21 @@ def compute_winners_losers(
 
   return (losers_to_sell, winners_to_buy)
 
+def buy(cash_available):
+  pass
+
 def perform_main_logic(rows, cash_available):
   # record all the history of cash, so we can plot it at the end
   # cash_history = []
   # record all the winners, so we can compute statistics later
-  winners_history = []
+  # winners_history = []
 
   # record all the price history, so we can compute statistics later
   # average_gains_history = []
 
   # transform prices in gain
   average_gains = compute_average_gains(rows)
-  # print('average_gains', average_gains)
+  print('average_gains', average_gains)
 
   current_winners_indices = []
 

@@ -3,7 +3,7 @@ from logic import compute_average_gains, compute_winners_losers
 
 class TestLogic(unittest.TestCase):
 
-  def x_test_compute_average_gains(self):
+  def test_compute_average_gains(self):
     rows = [
       [10], #0 -6
       [],
@@ -24,7 +24,7 @@ class TestLogic(unittest.TestCase):
       [20.56],
     ])
 
-  def x_test_compute_average_gains_real(self):
+  def test_compute_average_gains_real(self):
     rows = [
       [121.14, 83.41, 46.23, 229.19, 109.33, 160.6, 241.03, 124.25, 66.06, 180.56, 13.2],
       [119.46, 84.26, 48.02, 226.12, 117.16, 155.72, 250.03, 129.21, 69.33, 174.9, 13.52],
