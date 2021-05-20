@@ -67,7 +67,7 @@ def compute_winners_losers(
 def buy(cash_available):
   pass
 
-def perform_main_logic(rows, cash_available):
+def perform_main_logic(rows, portfolio):
   # record all the history of cash, so we can plot it at the end
   # cash_history = []
   # record all the winners, so we can compute statistics later

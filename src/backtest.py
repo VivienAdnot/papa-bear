@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 from logic import perform_main_logic
+from model.portfolio import Portfolio
 
 def parseCsv(spamreader):
   result = []
@@ -14,12 +15,13 @@ def parseCsv(spamreader):
   result.reverse()
   return result
 
-def main(cash_available):
+def main(investor):
   with open('data/papabear-15y-210510.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
     rows = parseCsv(spamreader)
     print(rows)
-    perform_main_logic(rows, cash_available)
+    perform_main_logic(rows, investor)
 
 start_cash = 1000 # dollars
-main(start_cash)
+portfolio = Portfolio(cash=start_cash)
+main(portfolio)
