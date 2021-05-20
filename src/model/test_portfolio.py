@@ -37,4 +37,4 @@ class TestPorfolio(unittest.TestCase):
 
   def test_sell(self):
     self.portfolio1.sell_at_market(ticker='GLD', units=2)
-    self.assertEqual(self.portfolio1.cash, 500.00 + (2 * (90 - 70)))
+    self.assertEqual(self.portfolio1.cash, 680.00)
