@@ -8,20 +8,20 @@ class Portfolio:
     self.cash = cash
     self.lines = lines if lines else {}
 
-  def add_line(self, units, ticker, book_price):
+  def add_line(self, units, ticker, price):
     if ticker not in self.lines:
       self.lines[ticker] = { 'book': [] }
     
-    self.lines[ticker]['market_price'] = book_price
+    self.lines[ticker]['market_price'] = price
     for _ in range(units):
-      self.lines[ticker]['book'].append(book_price)
+      self.lines[ticker]['book'].append(price)
 
-  def buy_at_market(self, units, ticker, book_price):
-    cost = units * book_price
+  def buy_at_market(self, units, ticker, price):
+    cost = units * price
     if self.cash < cost:
-      raise ValueError(f'{self.cash}€ cash available is insufficient to buy {units} units of {ticker} at {book_price}€')
+      raise ValueError(f'{self.cash}€ cash available is insufficient to buy {units} units of {ticker} at {price}€')
     self.cash = self.cash - cost
-    self.add_line(units=units, ticker=ticker, book_price=book_price)
+    self.add_line(units=units, ticker=ticker, price=price)
 
   # units None means sell all
   def sell_at_market(self, ticker, units = None):
