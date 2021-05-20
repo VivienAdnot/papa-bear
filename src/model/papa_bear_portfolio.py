@@ -1,4 +1,5 @@
-from portfolio import Portfolio
+# from portfolio import Portfolio
+from model.portfolio import Portfolio
 import math
 
 class PapaBearPortfolio(Portfolio):

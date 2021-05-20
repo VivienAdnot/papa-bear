@@ -38,3 +38,9 @@ class TestPorfolio(unittest.TestCase):
   def test_sell(self):
     self.portfolio1.sell_at_market(ticker='GLD', units=2)
     self.assertEqual(self.portfolio1.cash, 680.00)
+
+  def test_sell_all(self):
+    self.portfolio1.sell_all_at_market()
+    self.assertEqual(self.portfolio1.cash, 910.00)
+    self.assertEqual(len(self.portfolio1.lines['SPY']['book']), 0)
+    self.assertEqual(len(self.portfolio1.lines['GLD']['book']), 0)

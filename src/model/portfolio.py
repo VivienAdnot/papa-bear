@@ -37,6 +37,13 @@ class Portfolio:
       self.lines[ticker]['book'].pop()
       self.cash = self.cash + market_price
 
+  def sell_all_at_market(self):
+    for ticker in self.lines:
+      market_price = self.lines[ticker]['market_price']
+      for _ in range(len(self.lines[ticker]['book'])):
+        self.lines[ticker]['book'].pop()
+        self.cash = self.cash + market_price
+
   def update_market_price(self, ticker, market_price):
     if ticker not in self.lines:
       self.lines[ticker] = { 'book': [] }
