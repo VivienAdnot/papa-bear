@@ -45,6 +45,7 @@ class Portfolio:
       self.lines[ticker]['book'].append(price)
 
   # units None means sell all
+  # update_market_price is called outside of the method
   def sell_at_market(self, ticker, units = None):
     if ticker not in self.lines:
       raise ValueError(f'ticker {ticker} not found in lines. Cannot sell')
