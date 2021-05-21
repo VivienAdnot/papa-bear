@@ -1,7 +1,7 @@
 import unittest
 from numpy.testing import assert_array_equal
 
-from utils import average, compute_percentage_gain, get_3_max_values
+from utils import average, compute_percentage_gain, get_3_max_values, convert_to_year, convert_to_month
 
 class TestUtils(unittest.TestCase):
 
@@ -20,3 +20,19 @@ class TestUtils(unittest.TestCase):
     largest_indices, largest_values = get_3_max_values(values)
     assert_array_equal(largest_values, [9.01, 10.48, 13.58])
     assert_array_equal(largest_indices, [10, 7, 4])
+
+  def test_convert_to_year(self):
+    self.assertEqual(convert_to_year(10), 0)
+    self.assertEqual(convert_to_year(15), 1)
+    self.assertEqual(convert_to_year(30), 2)
+    self.assertEqual(convert_to_year(45), 3)
+    self.assertEqual(convert_to_year(58), 4)
+    self.assertEqual(convert_to_year(100), 8)
+    self.assertEqual(convert_to_year(140), 11)
+    self.assertEqual(convert_to_year(178), 14)
+    self.assertEqual(convert_to_year(181), 15)
+
+  def test_convert_to_month(self):
+    self.assertEqual(convert_to_month(10), 10)
+    self.assertEqual(convert_to_month(13), 1)
+    self.assertEqual(convert_to_month(25), 1)

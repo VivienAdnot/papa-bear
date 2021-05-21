@@ -24,7 +24,6 @@ def main(portfolio):
     perform_main_logic(rows, portfolio)
     portfolio.sell_all_at_market()
 
-
 start_cash = 1000 # dollars
 plt.figure(figsize=(12,5))
 plt.axhline(start_cash, color="gray") # horizontal gray line
