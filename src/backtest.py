@@ -22,7 +22,7 @@ def main(portfolio):
     print(rows)
     perform_main_logic(rows, portfolio)
     portfolio.sell_all_at_market()
-    print('final cash', portfolio.cash)
+    print('final value', portfolio.value)
 
 start_cash = 1000 # dollars
 portfolio = PapaBearPortfolio(cash=start_cash)

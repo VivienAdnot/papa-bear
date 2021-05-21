@@ -4,9 +4,11 @@ class Portfolio:
   cash: float # euros ?
   lines = {}
   value: float # euros ?
+  value_history = []
 
   def __init__(self, cash = 0.00, lines = None):
     self.value = 0.00
+    self.value_history = []
     self.cash = cash
     self.lines = lines if lines else {}
     self.update_value()
@@ -18,22 +20,29 @@ class Portfolio:
       units = len(book['book'])
       line_value = market_price * units
       value = value + line_value
-    self.value = value
+    # no need to update if value has not changed
+    if self.value != value:
+      self.value = value
+      self.value_history.append(self.value)
 
-  def add_line(self, units, ticker, price):
+  def update_market_price(self, ticker, market_price):
     if ticker not in self.lines:
       self.lines[ticker] = { 'book': [] }
-    
-    self.lines[ticker]['market_price'] = price
-    for _ in range(units):
-      self.lines[ticker]['book'].append(price)
+    self.lines[ticker]['market_price'] = market_price
+    self.update_value()
 
   def buy_at_market(self, units, ticker, price):
+    # this method also updates inner book value
+    self.update_market_price(ticker=ticker, market_price=price)
     cost = units * price
     if self.cash < cost:
       raise ValueError(f'{self.cash}€ cash available is insufficient to buy {units} units of {ticker} at {price}€')
     self.cash = self.cash - cost
-    self.add_line(units=units, ticker=ticker, price=price)
+    if ticker not in self.lines:
+      self.lines[ticker] = { 'book': [] }
+    
+    for _ in range(units):
+      self.lines[ticker]['book'].append(price)
 
   # units None means sell all
   def sell_at_market(self, ticker, units = None):
@@ -55,8 +64,3 @@ class Portfolio:
       for _ in range(len(self.lines[ticker]['book'])):
         self.lines[ticker]['book'].pop()
         self.cash = self.cash + market_price
-
-  def update_market_price(self, ticker, market_price):
-    if ticker not in self.lines:
-      self.lines[ticker] = { 'book': [] }
-    self.lines[ticker]['market_price'] = market_price
