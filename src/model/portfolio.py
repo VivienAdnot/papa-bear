@@ -3,10 +3,22 @@ from typing import List
 class Portfolio:
   cash: float # euros ?
   lines = {}
+  value: float # euros ?
 
   def __init__(self, cash = 0.00, lines = None):
+    self.value = 0.00
     self.cash = cash
     self.lines = lines if lines else {}
+    self.update_value()
+
+  def update_value(self):
+    value = self.cash
+    for ticker, book in self.lines.items():
+      market_price = book['market_price']
+      units = len(book['book'])
+      line_value = market_price * units
+      value = value + line_value
+    self.value = value
 
   def add_line(self, units, ticker, price):
     if ticker not in self.lines:

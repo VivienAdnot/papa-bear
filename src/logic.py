@@ -144,9 +144,6 @@ def compute_winners_losers(
 
   return (losers_to_sell, winners_to_buy)
 
-def buy(cash_available):
-  pass
-
 def perform_main_logic(rows, portfolio):
   average_gains = compute_average_gains(rows)
   print('average_gains', average_gains)
@@ -159,8 +156,6 @@ def perform_main_logic(rows, portfolio):
       print('avg_gains_row_idx', row_index)
       # print('current_winners_indices before arbitrage', current_winners_indices)
       # print(result[0])
-
-      print('cash', portfolio.cash)
 
       new_winners_indices, new_average_gains = get_3_max_values(row)
       print('new_winners_indices', new_winners_indices)
@@ -190,4 +185,3 @@ def perform_main_logic(rows, portfolio):
       current_winners_indices[:] = new_winners_indices
       print('current_winners_indices after arbitrage', current_winners_indices)
   print('------ end loop avg_gain_rows ------')
-  # print('winners_history: ', winners_history)

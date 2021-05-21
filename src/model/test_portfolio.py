@@ -18,6 +18,10 @@ class TestPorfolio(unittest.TestCase):
     self.assertEqual(self.portfolio1.lines['SPY']['market_price'], 20.00)
     self.assertEqual(self.portfolio1.lines['GLD']['market_price'], 90.00)
 
+  def test_update_value(self):
+    self.portfolio1.update_value()
+    self.assertEqual(self.portfolio1.value, 910.00)
+
   def test_buy_should_be_ok(self):
     portfolio = Portfolio(cash=1000.00)
     self.assertEqual(len(portfolio.lines), 0)
@@ -44,3 +48,4 @@ class TestPorfolio(unittest.TestCase):
     self.assertEqual(self.portfolio1.cash, 910.00)
     self.assertEqual(len(self.portfolio1.lines['SPY']['book']), 0)
     self.assertEqual(len(self.portfolio1.lines['GLD']['book']), 0)
+
