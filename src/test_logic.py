@@ -52,6 +52,7 @@ class TestLogic(unittest.TestCase):
     current_winners_indices = [1, 2, 3]
     new_winners_indices = [2, 4, 6]
 
-    losers_to_sell, winners_to_buy = compute_winners_losers(current_winners_indices, new_winners_indices)
+    losers_to_sell, winners_to_buy, keep_previous_winners = compute_winners_losers(current_winners_indices, new_winners_indices)
     self.assertEqual(losers_to_sell, [1, 3])
     self.assertEqual(winners_to_buy, [4, 6])
+    self.assertEqual(keep_previous_winners, [2])

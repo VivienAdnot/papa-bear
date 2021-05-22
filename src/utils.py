@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from datetime import date
 
 def get_3_max_values(arr):
   np_array = np.array(arr)
@@ -24,3 +25,6 @@ def convert_to_year(number):
 
 def convert_to_month(number):
   return number % 12
+
+def convert_month_index_to_string(month_index):
+  return date(1900, month_index, 1).strftime('%B')

@@ -31,7 +31,7 @@ plt.axhline(start_cash, color="gray") # horizontal gray line
 portfolio = PapaBearPortfolio(cash=start_cash)
 main(portfolio)
 print('final value', portfolio.value)
-print('value history', portfolio.value_history)
+# print('value history', portfolio.value_history)
 
 plt.plot(portfolio.value_history)
 plt.show()

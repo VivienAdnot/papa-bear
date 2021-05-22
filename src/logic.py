@@ -1,7 +1,7 @@
 import numpy as np
 from utils import get_3_max_values, average, compute_percentage_gain
 from logger import Logger
-from ticker_informations import tickers_informations
+from ticker_informations import get_ticker_from_indice, get_tickers_from_indices
 
 # average of current price, 1 month ago, 3 month ago, 6 month ago
 def compute_average_gains(rows):
@@ -93,40 +93,42 @@ def perform_main_logic(rows, portfolio):
       losers_to_sell, winners_to_buy, keep_previous_winners = compute_winners_losers(current_winners_indices, new_winners_indices)
       print('keep_previous_winners', keep_previous_winners)
       for keep_ticker_indice in keep_previous_winners:
-        ticker = tickers_informations[keep_ticker_indice]['ticker']
+        ticker = get_ticker_from_indice(keep_ticker_indice)
         new_price = rows[row_index][keep_ticker_indice]
         print(keep_ticker_indice, ticker, new_price)
         portfolio.update_market_price(ticker=ticker, market_price=new_price)
 
       print('losers_to_sell', losers_to_sell)
+      losers_tickers_with_price = []
       for loser_ticker_indice in losers_to_sell:
-        ticker = tickers_informations[loser_ticker_indice]['ticker']
+        ticker = get_ticker_from_indice(loser_ticker_indice)
         new_price = rows[row_index][loser_ticker_indice]
         print(loser_ticker_indice, ticker, new_price)
         portfolio.update_market_price(ticker=ticker, market_price=new_price)
         portfolio.sell_at_market(ticker=ticker)
+        losers_tickers_with_price.append((ticker, new_price))
 
       print('cash after sell', portfolio.cash)
 
       print('winners_to_buy', winners_to_buy)
       winners_tickers_with_price = []
       for winner_ticker_indice in winners_to_buy:
-        ticker = tickers_informations[winner_ticker_indice]['ticker']
+        ticker = get_ticker_from_indice(winner_ticker_indice)
         price = rows[row_index][winner_ticker_indice]
         winners_tickers_with_price.append((ticker, price))
+        print('winners_tickers_with_price', winners_tickers_with_price)
       if len(winners_tickers_with_price):
         portfolio.buy_winners(winners_tickers_with_price)
         print('cash after buy', portfolio.cash)
 
       logger.log(
         round=row_index,
-        current_winners_indices=current_winners_indices,
+        current_winners_indices=get_tickers_from_indices(current_winners_indices),
         cash_before=cash_before,
         value=portfolio.value,
-        keep_previous_winners=keep_previous_winners,
-        losers_to_sell=losers_to_sell,
-        winners_to_buy=winners_to_buy,
-        tickers_with_price='',
+        keep_previous_winners=get_tickers_from_indices(keep_previous_winners),
+        losers_to_sell=losers_tickers_with_price,
+        winners_to_buy=winners_tickers_with_price,
         cash_after=portfolio.cash,
         value_variation_absolute=round(portfolio.value-value_before, 2)
       )

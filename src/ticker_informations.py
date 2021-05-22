@@ -77,3 +77,12 @@ tickers_informations = {
     'etf_brand': 'PowerShares'
   }
 }
+
+def get_ticker_from_indice(indice):
+  return tickers_informations[indice]['ticker']
+
+def get_tickers_from_indices(indices):
+  result = []
+  for indice in indices:
+    result.append(tickers_informations[indice]['ticker'])
+  return result
