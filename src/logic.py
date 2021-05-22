@@ -1,86 +1,7 @@
 import numpy as np
 from utils import get_3_max_values, average, compute_percentage_gain
 from logger import Logger
-
-tickers_informations = {
-  0: {
-    'exchange': 'NASDAQ',
-    'ticker': 'IEF',
-    'full_name': '7-10 Year Treasury Bond',
-    'etf_provider': 'iShares',
-    'etf_brand': 'BlackRock'
-  },
-  1: {
-    'exchange': 'NASDAQ',
-    'ticker': 'VNQ',
-    'full_name': 'Real Estate',
-    'etf_provider': 'Vanguard',
-    'etf_brand': 'Vanguard'
-  },
-  2: {
-    'exchange': 'NYSEARCA',
-    'ticker': 'EEM',
-    'full_name': 'MSCI Emerging Markets',
-    'etf_provider': 'iShares',
-    'etf_brand': 'BlackRock'
-  },
-  3: {
-    'exchange': 'NYSEARCA',
-    'ticker': 'IWF',
-    'full_name': 'Russell 1000 Growth',
-    'etf_provider': 'iShares',
-    'etf_brand': 'BlackRock'
-  },
-  4: {
-    'exchange': 'NYSEARCA',
-    'ticker': 'IWN',
-    'full_name': 'Russell 2000 Value',
-    'etf_provider': 'iShares',
-    'etf_brand': 'BlackRock'
-  },
-  5: {
-    'exchange': 'NASDAQ',
-    'ticker': 'TLT',
-    'full_name': '20+ Year Treasury Bond',
-    'etf_provider': 'iShares',
-    'etf_brand': 'BlackRock'
-  },
-  6: {
-    'exchange': 'NYSEARCA',
-    'ticker': 'IWO',
-    'full_name': 'Russell 2000 Growth',
-    'etf_provider': 'iShares',
-    'etf_brand': 'BlackRock'
-  },
-  7: {
-    'exchange': 'NYSEARCA',
-    'ticker': 'IWD',
-    'full_name': 'Russell 1000 Value',
-    'etf_provider': 'iShares',
-    'etf_brand': 'BlackRock'
-  },
-  8: {
-    'exchange': 'NYSEARCA',
-    'ticker': 'EFA',
-    'full_name': 'Diversified Europe, Australia, Asia, and the Far East',
-    'etf_provider': 'iShares',
-    'etf_brand': 'BlackRock'
-  },
-  9: {
-    'exchange': 'NYSEARCA',
-    'ticker': 'GLD',
-    'full_name': 'Gold',
-    'etf_provider': 'State Street Global Advisors',
-    'etf_brand': 'State Street Global Advisors'
-  },
-  10: {
-    'exchange': 'NYSEARCA',
-    'ticker': 'DBC',
-    'full_name': 'Commodities',
-    'etf_provider': 'PowerShares',
-    'etf_brand': 'PowerShares'
-  }
-}
+from ticker_informations import tickers_informations
 
 # average of current price, 1 month ago, 3 month ago, 6 month ago
 def compute_average_gains(rows):
@@ -207,7 +128,7 @@ def perform_main_logic(rows, portfolio):
         winners_to_buy=winners_to_buy,
         tickers_with_price='',
         cash_after=portfolio.cash,
-        value_variation_absolute=portfolio.value-value_before
+        value_variation_absolute=round(portfolio.value-value_before, 2)
       )
 
       current_winners_indices[:] = new_winners_indices
