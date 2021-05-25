@@ -38,7 +38,7 @@ class Portfolio:
     if self.cash < cost:
       raise ValueError(f'{self.cash}€ cash available is insufficient to buy {units} units of {ticker} at {price}€')
     self.cash = round(self.cash - cost, 2)
-    print(f'buy at market {units} units of {ticker} at {price}$. cash is now {self.cash}')
+    # print(f'buy at market {units} units of {ticker} at {price}$. cash is now {self.cash}')
     if ticker not in self.lines:
       self.lines[ticker] = { 'book': [] }
     
@@ -58,7 +58,7 @@ class Portfolio:
 
     for _ in range(units_to_remove):
       self.lines[ticker]['book'].pop()
-      print(f'sell_at_market:: {self.cash} + {market_price} => {round(self.cash + market_price, 2)}')
+      # print(f'sell_at_market:: {self.cash} + {market_price} => {round(self.cash + market_price, 2)}')
       self.cash = round(self.cash + market_price, 2)
 
   def sell_all_at_market(self):

@@ -112,13 +112,16 @@ def perform_main_logic(rows, portfolio):
 
       print('winners_to_buy', winners_to_buy)
       winners_tickers_with_price = []
+      winners_tickers_with_price_and_units = []
       for winner_ticker_indice in winners_to_buy:
         ticker = get_ticker_from_indice(winner_ticker_indice)
         price = rows[row_index][winner_ticker_indice]
-        winners_tickers_with_price.append((ticker, price))
+        average_gain = row[winner_ticker_indice]
+        print('winner_ticker_indice', winner_ticker_indice, 'row average_gain', average_gain)
+        winners_tickers_with_price.append((ticker, price, average_gain))
         print('winners_tickers_with_price', winners_tickers_with_price)
       if len(winners_tickers_with_price):
-        portfolio.buy_winners(winners_tickers_with_price)
+        winners_tickers_with_price_and_units = portfolio.buy_winners(winners_tickers_with_price)
         print('cash after buy', portfolio.cash)
 
       logger.log(
@@ -128,7 +131,7 @@ def perform_main_logic(rows, portfolio):
         value=portfolio.value,
         keep_previous_winners=get_tickers_from_indices(keep_previous_winners),
         losers_to_sell=losers_tickers_with_price,
-        winners_to_buy=winners_tickers_with_price,
+        winners_to_buy=winners_tickers_with_price_and_units,
         cash_after=portfolio.cash,
         value_variation_absolute=round(portfolio.value-value_before, 2)
       )
