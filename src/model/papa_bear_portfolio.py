@@ -12,27 +12,31 @@ class PapaBearPortfolio(Portfolio):
     results = []
     number_assets = len(tickers_with_price)
     max_cash_per_asset = self.cash / number_assets
-    print(number_assets, max_cash_per_asset)
+    # print(number_assets, max_cash_per_asset)
 
     idx = -1
-    # sort by average_gain desc
-    sorted_tickers_with_price = sorted(tickers_with_price, key=lambda tup: tup[2], reverse=True)
+    sorted_tickers_by_gain_desc = sorted(tickers_with_price, key=lambda tup: tup[2], reverse=True)
+    sorted_tickers_by_price_asc = sorted(tickers_with_price, key=lambda tup: tup[1], reverse=False)
     amount = 0
+    minimum_price = sorted_tickers_by_price_asc[0][1]
 
-    for (ticker, price, average_gain) in sorted_tickers_with_price:
+    for (ticker, price, average_gain) in sorted_tickers_by_gain_desc:
       idx = idx + 1
       units = math.floor(max_cash_per_asset / price)
       amount = amount + (units * price)
-      print(idx, ticker, units, price)
+      # print(idx, ticker, units, price)
       results.append((ticker, units, price))
     
     # second round for filling the rest
-    for (ticker, price, average_gain) in sorted_tickers_with_price:
-      rest = self.cash - amount
-      if rest > 0 and price < rest:
-        amount = amount + price
-        print(f'buy 1 more unit of {ticker} at {price}€')
-        results.append((ticker, 1, price))
+    rest = self.cash - amount
+    # print('rest', rest, 'minimum price', minimum_price)
+    while rest > 0 and minimum_price < rest:
+      for (ticker, price, average_gain) in sorted_tickers_by_gain_desc:
+        if rest > 0 and price < rest:
+          amount = amount + price
+          rest = self.cash - amount
+          # print(f'buy 1 more unit of {ticker} at {price}€')
+          results.append((ticker, 1, price))
 
     return results
 
