@@ -78,3 +78,14 @@ class TestPorfolio(unittest.TestCase):
     self.assertEqual(len(portfolio.lines['SPY']['book']), 0)
     self.assertEqual(len(portfolio.lines['GLD']['book']), 0)
 
+  def test_get_average_book_price(self):
+    portfolio = self.build_portfolio()
+    self.assertEqual(portfolio.get_average_book_price('SPY'), 11.43)
+    self.assertEqual(portfolio.get_average_book_price('GLD'), 70.00)
+
+  def test_get_latent_profit(self):
+    portfolio = self.build_portfolio()
+    portfolio.update_market_price(ticker='SPY', market_price=20.00)
+    portfolio.update_market_price(ticker='GLD', market_price=90.00)
+    self.assertEqual(portfolio.get_latent_profit('SPY'), 59.99)
+    self.assertEqual(portfolio.get_latent_profit('GLD'), 60.00)

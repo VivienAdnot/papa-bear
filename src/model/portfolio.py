@@ -67,3 +67,17 @@ class Portfolio:
       for _ in range(len(self.lines[ticker]['book'])):
         self.lines[ticker]['book'].pop()
         self.cash = round(self.cash + market_price, 2)
+
+  def get_average_book_price(self, ticker):
+    if ticker not in self.lines:
+      raise ValueError(f'ticker {ticker} not found in lines.')
+    book = self.lines[ticker]['book']
+    return round(sum(book) / len(book), 2)
+
+  def get_latent_profit(self, ticker):
+    if ticker not in self.lines:
+      raise ValueError(f'ticker {ticker} not found in lines.')
+    average_book_price = self.get_average_book_price(ticker)
+    units = len(self.lines[ticker]['book'])
+    market_price = self.lines[ticker]['market_price']
+    return round((market_price * units) - (average_book_price * units), 2)

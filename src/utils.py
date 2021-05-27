@@ -12,6 +12,7 @@ def get_3_max_values(arr):
   return indices, result
 
 # compute arithmetic average of array
+# average(arg1, arg2, arg3)
 def average(*args):
   return round(sum(args) / len(args), 2)
 
