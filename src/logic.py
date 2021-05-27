@@ -72,64 +72,64 @@ def compute_winners_losers(
 def perform_main_logic(rows, portfolio):
   logger = Logger()
   average_gains = compute_average_gains(rows)
-  print('average_gains', average_gains)
+  # print('average_gains', average_gains)
 
   current_winners_indices = []
 
-  print('------ loop avg_gain_rows ------')
+  # print('------ loop avg_gain_rows ------')
   for row_index, row in enumerate(average_gains):
     if (row_index >= 6):
       cash_before = portfolio.cash
       value_before = portfolio.value
 
-      print('avg_gains_row_idx', row_index)
+      # print('avg_gains_row_idx', row_index)
       # print('current_winners_indices before arbitrage', current_winners_indices)
       # print(result[0])
 
       new_winners_indices, new_average_gains = get_3_max_values(row)
-      print('new_winners_indices', new_winners_indices)
+      # print('new_winners_indices', new_winners_indices)
       # print('new_average_gains', new_average_gains)
       
       losers_to_sell, winners_to_buy, keep_previous_winners = compute_winners_losers(current_winners_indices, new_winners_indices)
-      print('keep_previous_winners', keep_previous_winners)
       for keep_ticker_indice in keep_previous_winners:
         ticker = get_ticker_from_indice(keep_ticker_indice)
         new_price = rows[row_index][keep_ticker_indice]
-        print(keep_ticker_indice, ticker, new_price)
+        # print(keep_ticker_indice, ticker, new_price)
         portfolio.update_market_price(ticker=ticker, market_price=new_price)
 
-      print('losers_to_sell', losers_to_sell)
+      # print('losers_to_sell', losers_to_sell)
       losers_tickers_with_price = []
       for loser_ticker_indice in losers_to_sell:
         ticker = get_ticker_from_indice(loser_ticker_indice)
         new_price = rows[row_index][loser_ticker_indice]
-        print(loser_ticker_indice, ticker, new_price)
+        # print(loser_ticker_indice, ticker, new_price)
         portfolio.update_market_price(ticker=ticker, market_price=new_price)
         portfolio.sell_at_market(ticker=ticker)
         losers_tickers_with_price.append((ticker, new_price))
 
-      print('cash after sell', portfolio.cash)
+      # print('cash after sell', portfolio.cash)
 
-      print('winners_to_buy', winners_to_buy)
+      # print('winners_to_buy', winners_to_buy)
       winners_tickers_with_price = []
       winners_tickers_with_price_and_units = []
       for winner_ticker_indice in winners_to_buy:
         ticker = get_ticker_from_indice(winner_ticker_indice)
         price = rows[row_index][winner_ticker_indice]
         average_gain = row[winner_ticker_indice]
-        print('winner_ticker_indice', winner_ticker_indice, 'row average_gain', average_gain)
+        # print('winner_ticker_indice', winner_ticker_indice, 'row average_gain', average_gain)
         winners_tickers_with_price.append((ticker, price, average_gain))
-        print('winners_tickers_with_price', winners_tickers_with_price)
+        # print('winners_tickers_with_price', winners_tickers_with_price)
       if len(winners_tickers_with_price):
         winners_tickers_with_price_and_units = portfolio.buy_winners(winners_tickers_with_price)
-        print('cash after buy', portfolio.cash)
+        # print('cash after buy', portfolio.cash)
 
       logger.log(
+        portfolio=portfolio,
         round=row_index,
         current_winners_indices=get_tickers_from_indices(current_winners_indices),
         cash_before=cash_before,
         value=portfolio.value,
-        keep_previous_winners=get_tickers_from_indices(keep_previous_winners),
+        keep_previous_winners=keep_previous_winners,
         losers_to_sell=losers_tickers_with_price,
         winners_to_buy=winners_tickers_with_price_and_units,
         cash_after=portfolio.cash,
@@ -137,5 +137,5 @@ def perform_main_logic(rows, portfolio):
       )
 
       current_winners_indices[:] = new_winners_indices
-      print('current_winners_indices after arbitrage', current_winners_indices)
-  print('------ end loop avg_gain_rows ------')
+      # print('current_winners_indices after arbitrage', current_winners_indices)
+  # print('------ end loop avg_gain_rows ------')

@@ -2,6 +2,7 @@ from datetime import date
 import csv
 from typing import Any
 from utils import convert_to_year, convert_to_month, convert_month_index_to_string
+from ticker_informations import get_ticker_from_indice
 
 class Logger:
   file_name = 'papa_bear.csv'
@@ -27,6 +28,7 @@ class Logger:
 
   def log(
     self,
+    portfolio,
     round,
     current_winners_indices,
     cash_before,
@@ -40,6 +42,13 @@ class Logger:
     year_index = convert_to_year(round)
     year_date_years_ago = today.year - 15 + year_index
 
+    keep_previous_winners_infos = []
+
+    for winner_index in keep_previous_winners:
+      ticker = get_ticker_from_indice(winner_index)
+      latent_profit = portfolio.get_latent_profit(ticker)
+      keep_previous_winners_infos.append((ticker, latent_profit))
+
     month = convert_month_index_to_string(convert_to_month(round) + 1)
     self.file_writer.writerow([
       round,
@@ -49,7 +58,7 @@ class Logger:
       current_winners_indices,
       cash_before,
       value,
-      keep_previous_winners,
+      keep_previous_winners_infos,
       losers_to_sell,
       winners_to_buy,
       cash_after,
