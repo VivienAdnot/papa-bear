@@ -104,8 +104,10 @@ def perform_main_logic(rows, portfolio):
         new_price = rows[row_index][loser_ticker_indice]
         # print(loser_ticker_indice, ticker, new_price)
         portfolio.update_market_price(ticker=ticker, market_price=new_price)
+        latent_profit = f'{portfolio.get_latent_profit(ticker)}€'
+        units = len(portfolio.lines[ticker]['book'])
         portfolio.sell_at_market(ticker=ticker)
-        losers_tickers_with_price.append((ticker, new_price))
+        losers_tickers_with_price.append((ticker, latent_profit, f'{units} at {new_price}€'))
 
       # print('cash after sell', portfolio.cash)
 
