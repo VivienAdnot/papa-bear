@@ -46,8 +46,10 @@ class Logger:
 
     for winner_index in keep_previous_winners:
       ticker = get_ticker_from_indice(winner_index)
-      latent_profit = portfolio.get_latent_profit(ticker)
-      keep_previous_winners_infos.append((ticker, latent_profit))
+      latent_profit = f'{portfolio.get_latent_profit(ticker)}€'
+      units = len(portfolio.lines[ticker]['book'])
+      market_price = portfolio.lines[ticker]['market_price']
+      keep_previous_winners_infos.append((ticker, latent_profit, f'{units} at {market_price}€'))
 
     month = convert_month_index_to_string(convert_to_month(round) + 1)
     self.file_writer.writerow([
