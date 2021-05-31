@@ -1,8 +1,16 @@
 import csv
 import numpy as np
+import datetime
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 from logic import perform_main_logic
 from model.papa_bear_portfolio import PapaBearPortfolio
-import matplotlib.pyplot as plt
+
+def create_date_array(start, length):
+  return [start + datetime.timedelta(days=(30.4 * i)) for i in range(length)]
+
+start = datetime.date(2007, 1, 1)
+dates = create_date_array(start, 176)
 
 def parseCsv(spamreader):
   result = []
@@ -16,23 +24,27 @@ def parseCsv(spamreader):
   result.reverse()
   return result
 
-def main(portfolio):
+def main(portfolio, portfolio_value):
   with open('data/papabear-15y-210510.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
     rows = parseCsv(spamreader)
-    # print(rows)
-    perform_main_logic(rows, portfolio)
+    perform_main_logic(rows, portfolio, portfolio_value)
     portfolio.sell_all_at_market()
 
 start_cash = 1000 # dollars
-plt.figure(figsize=(12,5))
-plt.axhline(start_cash, color="gray") # horizontal gray line
-
 portfolio = PapaBearPortfolio(cash=start_cash)
-main(portfolio)
-# print('final value', portfolio.value)
-# print('value history', portfolio.value_history)
+portfolio_value = []
+main(portfolio, portfolio_value)
 
-plt.plot(portfolio.value_history)
+# plt.figure(figsize=(12,5))
+# plt.axhline(start_cash, color="gray") # horizontal gray line
+
+fig, ax = plt.subplots()
+locator = mdates.AutoDateLocator()
+formatter = mdates.ConciseDateFormatter(locator)
+ax.xaxis.set_major_locator(locator)
+ax.xaxis.set_major_formatter(formatter)
+ax.grid(True)
+
+ax.plot(dates, portfolio_value)
 plt.show()
-plt.close()

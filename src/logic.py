@@ -69,7 +69,7 @@ def compute_winners_losers(
 
   return (losers_to_sell, winners_to_buy, keep_previous_winners)
 
-def perform_main_logic(rows, portfolio):
+def perform_main_logic(rows, portfolio, portfolio_value):
   logger = Logger()
   average_gains = compute_average_gains(rows)
   # print('average_gains', average_gains)
@@ -139,5 +139,6 @@ def perform_main_logic(rows, portfolio):
       )
 
       current_winners_indices[:] = new_winners_indices
+      portfolio_value.append(portfolio.value)
       # print('current_winners_indices after arbitrage', current_winners_indices)
   # print('------ end loop avg_gain_rows ------')
