@@ -1,7 +1,7 @@
 from datetime import date
 import csv
 from typing import Any
-from utils import convert_to_year, convert_to_month, convert_month_index_to_string
+from utils import convert_to_year, convert_to_month, convert_month_index_to_string, convert_to_year_15_years_ago
 from ticker_informations import get_ticker_from_indice
 
 class Logger:
@@ -38,9 +38,8 @@ class Logger:
     winners_to_buy,
     cash_after,
     value_variation_absolute):
-    today = date.today()
     year_index = convert_to_year(round)
-    year_date_years_ago = today.year - 15 + year_index
+    year_date_years_ago = convert_to_year_15_years_ago(round)
 
     keep_previous_winners_infos = []
 

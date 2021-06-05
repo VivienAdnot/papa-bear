@@ -1,7 +1,6 @@
 import unittest
 from numpy.testing import assert_array_equal
-
-from utils import average, compute_percentage_gain, get_3_max_values, convert_to_year, convert_to_month
+from utils import average, compute_percentage_gain, get_3_max_values, convert_to_year, convert_to_month, increment_month
 
 class TestUtils(unittest.TestCase):
 
@@ -36,3 +35,8 @@ class TestUtils(unittest.TestCase):
     self.assertEqual(convert_to_month(10), 10)
     self.assertEqual(convert_to_month(13), 1)
     self.assertEqual(convert_to_month(25), 1)
+
+  def test_increment_month(self):
+    self.assertEqual(increment_month(1), 2)
+    self.assertEqual(increment_month(11), 12)
+    self.assertEqual(increment_month(12), 1)

@@ -36,14 +36,17 @@ portfolio = PapaBearPortfolio(cash=start_cash)
 portfolio_value = []
 main(portfolio, portfolio_value)
 
-# plt.figure(figsize=(12,5))
-# plt.axhline(start_cash, color="gray") # horizontal gray line
+years = mdates.YearLocator()   # every year
+months = mdates.MonthLocator()  # every month
+yearsFmt = mdates.DateFormatter('%Y')
 
 fig, ax = plt.subplots()
-locator = mdates.AutoDateLocator()
-formatter = mdates.ConciseDateFormatter(locator)
-ax.xaxis.set_major_locator(locator)
-ax.xaxis.set_major_formatter(formatter)
+
+ax.xaxis.set_major_locator(years)
+ax.xaxis.set_major_formatter(yearsFmt)
+ax.xaxis.set_minor_locator(months)
+ax.format_xdata = mdates.DateFormatter('%Y-%m-%d')
+
 ax.grid(True)
 
 ax.plot(dates, portfolio_value)

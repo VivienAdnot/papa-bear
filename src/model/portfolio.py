@@ -5,6 +5,11 @@ class Portfolio:
   lines = {}
   value: float # euros ?
   value_history = []
+  month = 0
+  year=0
+  taxes_profit_loss_year_history = []
+  taxes_to_pay = 0
+  paid_tax_history = {}
 
   def __init__(self, cash = 0.00, lines = None):
     self.value = 0.00
@@ -12,6 +17,43 @@ class Portfolio:
     self.cash = cash
     self.lines = lines if lines else {}
     self.update_value()
+
+  def pay_taxes(self):
+    self.paid_tax_history[self.year] = {
+      'paid': False,
+      'amount': 0
+    }
+    total_year_profit_loss = round(sum(self.taxes_profit_loss_year_history), 2)
+    # print(f'{self.year}: total_year_profit_loss: {total_year_profit_loss}')
+
+    if total_year_profit_loss < 0:
+      self.paid_tax_history[self.year]['paid'] = True
+      self.paid_tax_history[self.year]['amount'] = 0
+      # print(f'no need to pay taxes this year')
+      return
+
+    # in case we didn't finish to pay last year taxes
+    self.taxes_to_pay = round(self.taxes_to_pay + total_year_profit_loss * 0.3, 2)
+    # print(f'{self.year}: taxes_to_pay: {self.taxes_to_pay}')
+
+    # print(f'try pay {self.taxes_to_pay}€ taxes with {self.cash}€ cash.')
+    self.taxes_profit_loss_year_history.clear()
+    # if portfolio has enough cash
+    if self.cash > self.taxes_to_pay:
+      self.cash = round(self.cash - self.taxes_to_pay, 2)
+      # print(f'paid whole taxes. cash is now {self.cash}')
+      self.paid_tax_history[self.year]['paid'] = True
+      self.paid_tax_history[self.year]['amount'] = self.taxes_to_pay
+      self.taxes_to_pay = 0
+    # if we do not have enough cash
+    else:
+      self.taxes_to_pay = self.taxes_to_pay - self.cash
+      # print(f'partially paid taxes. {self.taxes_to_pay} left to pay')
+      self.cash = 0
+    self.update_value()
+
+  def compute_pending_taxes(self, new_profit_or_loss):
+    self.taxes_profit_loss_year_history.append(new_profit_or_loss)
 
   def update_value(self):
     value = self.cash
@@ -45,6 +87,10 @@ class Portfolio:
     for _ in range(units):
       self.lines[ticker]['book'].append(price)
 
+  def should_pay_tax(self):
+    return self.month == 1 and self.year not in self.paid_tax_history
+    # or self.paid_tax_history[self.year]['paid'] == False)
+
   # units None means sell all
   # update_market_price is called outside of the method
   def sell_at_market(self, ticker, units = None):
@@ -57,9 +103,15 @@ class Portfolio:
     market_price = self.lines[ticker]['market_price']
 
     for _ in range(units_to_remove):
-      self.lines[ticker]['book'].pop()
+      book_price = self.lines[ticker]['book'].pop()
       # print(f'sell_at_market:: {self.cash} + {market_price} => {round(self.cash + market_price, 2)}')
+      profit_or_loss = market_price - book_price
       self.cash = round(self.cash + market_price, 2)
+      self.compute_pending_taxes(profit_or_loss)
+    
+    # january: time to pay our taxes
+    if self.should_pay_tax():
+      self.pay_taxes()
 
   def sell_all_at_market(self):
     for ticker in self.lines:
@@ -72,6 +124,8 @@ class Portfolio:
     if ticker not in self.lines:
       raise ValueError(f'ticker {ticker} not found in lines.')
     book = self.lines[ticker]['book']
+    if len(book) == 0:
+      return 0
     return round(sum(book) / len(book), 2)
 
   def get_latent_profit(self, ticker):

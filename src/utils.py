@@ -24,8 +24,16 @@ def compute_percentage_gain(value_current, value_previous):
 def convert_to_year(number):
   return math.floor(number / 12)
 
+def convert_to_year_15_years_ago(number):
+  year_index = convert_to_year(number)
+  return date.today().year - 15 + year_index
+
 def convert_to_month(number):
   return number % 12
 
 def convert_month_index_to_string(month_index):
   return date(1900, month_index, 1).strftime('%B')
+
+# month must be between 1 and 12
+def increment_month(month):
+  return month + 1 if month < 12 else 1

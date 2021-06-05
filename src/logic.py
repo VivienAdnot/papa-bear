@@ -1,5 +1,5 @@
 import numpy as np
-from utils import get_3_max_values, average, compute_percentage_gain
+from utils import get_3_max_values, average, compute_percentage_gain, increment_month, convert_to_year, convert_to_month, convert_to_year_15_years_ago
 from logger import Logger
 from ticker_informations import get_ticker_from_indice, get_tickers_from_indices
 
@@ -75,9 +75,14 @@ def perform_main_logic(rows, portfolio, portfolio_value):
   # print('average_gains', average_gains)
 
   current_winners_indices = []
+  # month_index will go from 1 to 12
+  # we start on 1
+  month_index = 0
 
   # print('------ loop avg_gain_rows ------')
   for row_index, row in enumerate(average_gains):
+    portfolio.month = increment_month(month_index)
+    portfolio.year = convert_to_year_15_years_ago(row_index)
     if (row_index >= 6):
       cash_before = portfolio.cash
       value_before = portfolio.value
