@@ -30,8 +30,9 @@ def main(portfolio, portfolio_value):
     rows = parseCsv(spamreader)
     perform_main_logic(rows, portfolio, portfolio_value)
     portfolio.sell_all_at_market()
+    print(portfolio.paid_tax_history)
 
-start_cash = 1000 # dollars
+start_cash = 10000 # dollars
 portfolio = PapaBearPortfolio(cash=start_cash)
 portfolio_value = []
 main(portfolio, portfolio_value)

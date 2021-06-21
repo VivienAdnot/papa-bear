@@ -25,7 +25,16 @@ class TestPapaBearPorfolio(unittest.TestCase):
     tickers_with_price = [('IWD', 81.95, 14.42), ('EFA', 72.38, 8.72), ('EEM', 37.32, 26.13)]
     portfolio.buy_winners(tickers_with_price)
     self.assertEqual(len(portfolio.lines), 3)
-    self.assertEqual(portfolio.cash, 30.1)
+    self.assertEqual(portfolio.cash, 90.65)
+
+  def test_buy_winners_large(self):
+    portfolio = PapaBearPortfolio(cash=100000.00)
+    self.assertEqual(len(portfolio.lines), 0)
+
+    tickers_with_price = [('IWD', 81.95, 14.42), ('EFA', 72.38, 8.72), ('EEM', 37.32, 26.13)]
+    portfolio.buy_winners(tickers_with_price)
+    self.assertEqual(len(portfolio.lines), 3)
+    self.assertEqual(portfolio.cash, 120.56)
 
   def test_sell_then_buy_winners(self):
     lines = {
@@ -43,13 +52,13 @@ class TestPapaBearPorfolio(unittest.TestCase):
     portfolio.sell_at_market(ticker='IWD')
     portfolio.sell_at_market(ticker='EFA')
 
-    self.assertEqual(portfolio.cash, 630.00)
+    self.assertEqual(portfolio.cash, 620.81)
 
     tickers_with_price = [('IWD', 81.95, 14.42), ('EFA', 72.38, 8.72), ('EEM', 37.32, 26.13)]
     portfolio.buy_winners(tickers_with_price)
 
     self.assertEqual(len(portfolio.lines), 3)
-    self.assertEqual(portfolio.cash, 15.47)
-    self.assertEqual(portfolio.value, 630.00)
-    self.assertEqual(portfolio.value_history, [630.00])
+    self.assertEqual(portfolio.cash, 111.46)
+    self.assertEqual(portfolio.value, 606.72)
+    self.assertEqual(portfolio.value_history, [630.0, 625.4, 620.81, 616.11, 611.44, 606.72])
 

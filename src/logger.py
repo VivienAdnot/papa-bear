@@ -16,14 +16,17 @@ class Logger:
       'Y idx',
       'year',
       'month',
-      'curr winners idx',
+      'prev winners idx',
+      'new winners idx',
       '$ before',
-      'value',
       'hold',
       'sell',
+      'sell fees',
       'buy',
       '$ after',
-      '$ value change'
+      'value',
+      '$ value change',
+      'gvnt tax'
     ])
 
   def log(
@@ -31,13 +34,16 @@ class Logger:
     portfolio,
     round,
     current_winners_indices,
+    new_winners_indices,
     cash_before,
-    value,
     keep_previous_winners,
     losers_to_sell,
+    broker_sell_fees,
     winners_to_buy,
     cash_after,
-    value_variation_absolute):
+    value,
+    value_variation_absolute,
+    government_taxes):
     year_index = convert_to_year(round)
     year_date_years_ago = convert_to_year_15_years_ago(round)
 
@@ -51,17 +57,21 @@ class Logger:
       keep_previous_winners_infos.append((ticker, latent_profit, f'{units} at {market_price}€'))
 
     month = convert_month_index_to_string(convert_to_month(round) + 1)
+    
     self.file_writer.writerow([
       round,
       year_index,
       year_date_years_ago,
       month,
       current_winners_indices,
+      new_winners_indices,
       cash_before,
-      value,
       keep_previous_winners_infos,
       losers_to_sell,
+      broker_sell_fees,
       winners_to_buy,
       cash_after,
-      value_variation_absolute
+      value,
+      value_variation_absolute,
+      government_taxes
     ])

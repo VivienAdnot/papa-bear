@@ -77,13 +77,14 @@ def perform_main_logic(rows, portfolio, portfolio_value):
   current_winners_indices = []
   # month_index will go from 1 to 12
   # we start on 1
-  month_index = 0
+  # month_index = 0
 
   # print('------ loop avg_gain_rows ------')
   for row_index, row in enumerate(average_gains):
-    portfolio.month = increment_month(month_index)
+    portfolio.month = convert_to_month(row_index)
     portfolio.year = convert_to_year_15_years_ago(row_index)
     if (row_index >= 6):
+      print(f'new row: {row_index}')
       cash_before = portfolio.cash
       value_before = portfolio.value
 
@@ -104,6 +105,8 @@ def perform_main_logic(rows, portfolio, portfolio_value):
 
       # print('losers_to_sell', losers_to_sell)
       losers_tickers_with_price = []
+      government_taxes = []
+      broker_sell_fees = []
       for loser_ticker_indice in losers_to_sell:
         ticker = get_ticker_from_indice(loser_ticker_indice)
         new_price = rows[row_index][loser_ticker_indice]
@@ -111,7 +114,9 @@ def perform_main_logic(rows, portfolio, portfolio_value):
         portfolio.update_market_price(ticker=ticker, market_price=new_price)
         latent_profit = f'{portfolio.get_latent_profit(ticker)}€'
         units = len(portfolio.lines[ticker]['book'])
-        portfolio.sell_at_market(ticker=ticker)
+        (sell_broker_fee, government_tax) = portfolio.sell_at_market(ticker=ticker)
+        broker_sell_fees.append(sell_broker_fee)
+        government_taxes.append(government_tax)
         losers_tickers_with_price.append((ticker, latent_profit, f'{units} at {new_price}€'))
 
       # print('cash after sell', portfolio.cash)
@@ -134,13 +139,16 @@ def perform_main_logic(rows, portfolio, portfolio_value):
         portfolio=portfolio,
         round=row_index,
         current_winners_indices=get_tickers_from_indices(current_winners_indices),
+        new_winners_indices=get_tickers_from_indices(new_winners_indices),
         cash_before=cash_before,
-        value=portfolio.value,
         keep_previous_winners=keep_previous_winners,
         losers_to_sell=losers_tickers_with_price,
+        broker_sell_fees=broker_sell_fees,
         winners_to_buy=winners_tickers_with_price_and_units,
         cash_after=portfolio.cash,
-        value_variation_absolute=round(portfolio.value-value_before, 2)
+        value=portfolio.value,
+        value_variation_absolute=round(portfolio.value-value_before, 2),
+        government_taxes=government_taxes
       )
 
       current_winners_indices[:] = new_winners_indices
